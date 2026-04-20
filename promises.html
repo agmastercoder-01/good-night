@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Future Promises 🤞 — AG & Rupsha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Pacifico&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:#1a0a1e;}
+body{font-family:'Nunito',sans-serif;overflow-x:hidden;}
+
+.starbg{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.star{position:absolute;border-radius:50%;background:white;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1);}50%{opacity:1;transform:scale(1.5);}}
+
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 40% at 20% 20%,rgba(212,83,126,.35) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 50% at 80% 10%,rgba(138,43,226,.3) 0%,transparent 70%),
+    radial-gradient(ellipse 70% 40% at 50% 80%,rgba(232,168,32,.2) 0%,transparent 70%);}
+
+.floating-hearts{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.fh{position:absolute;animation:floatUp linear infinite;opacity:0;}
+@keyframes floatUp{0%{transform:translateY(0) rotate(0deg);opacity:0;}10%{opacity:.7;}90%{opacity:.3;}100%{transform:translateY(-110vh) rotate(25deg);opacity:0;}}
+
+/* TOPBAR */
+.topbar{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;
+  padding:16px 28px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(26,10,30,.6);backdrop-filter:blur(10px);}
+.logo{font-family:'Pacifico',cursive;font-size:20px;text-decoration:none;
+  background:linear-gradient(90deg,#f7c766,#D4537E,#b57bee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.enjoy-text{font-family:'Pacifico',cursive;font-size:15px;letter-spacing:3px;
+  background:linear-gradient(90deg,#f7c766,#ff85b0,#b57bee,#f7c766);
+  background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:enjoyShift 2.5s linear infinite;}
+@keyframes enjoyShift{0%{background-position:0%;}100%{background-position:300%;}}
+.return-btn{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.5px;
+  padding:7px 16px;border-radius:20px;border:1.5px solid rgba(212,83,126,.45);
+  color:#ffb3d1;background:rgba(212,83,126,.1);text-decoration:none;transition:all .2s;white-space:nowrap;}
+.return-btn:hover{background:rgba(212,83,126,.35);color:white;border-color:#D4537E;transform:translateX(-2px);}
+
+/* HERO */
+.page-hero{position:relative;z-index:5;text-align:center;padding:44px 20px 28px;}
+.hero-tag{display:inline-block;border:1.5px solid rgba(247,199,102,.4);color:#f7c766;
+  font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  padding:5px 20px;border-radius:30px;margin-bottom:16px;background:rgba(247,199,102,.07);}
+.hero-title{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;font-style:italic;
+  color:white;line-height:1.1;margin-bottom:10px;text-shadow:0 0 50px rgba(212,83,126,.5);}
+.hero-title span{background:linear-gradient(90deg,#f7c766,#ffb3d1,#f7c766);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{color:rgba(255,255,255,.45);font-size:14px;font-weight:700;font-style:italic;}
+
+/* PROMISE STAGE */
+.promise-stage{position:relative;z-index:5;margin:0 28px 20px;
+  background:linear-gradient(145deg,rgba(30,9,38,.95),rgba(21,6,32,.98));
+  border:1px solid rgba(212,83,126,.2);border-radius:28px;
+  padding:36px 36px 36px;min-height:420px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.promise-stage::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,#b57bee,#D4537E,#f7c766,#D4537E,#b57bee,transparent);
+  border-radius:28px 28px 0 0;}
+.promise-stage::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,#f7c766,#D4537E,#b57bee,#D4537E,#f7c766,transparent);
+  border-radius:0 0 28px 28px;}
+
+/* progress */
+.prog-wrap{width:100%;margin-bottom:28px;}
+.prog-label{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:8px;display:flex;justify-content:space-between;}
+.prog-track{height:5px;background:rgba(255,255,255,.08);border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#D4537E,#b57bee);
+  transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+/* promise card */
+.promise-card{width:100%;text-align:center;animation:promiseIn .55s cubic-bezier(.34,1.2,.64,1) forwards;}
+@keyframes promiseIn{from{opacity:0;transform:translateY(30px) scale(.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+.p-number{display:inline-block;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:#f7c766;border:1px solid rgba(247,199,102,.3);padding:3px 16px;border-radius:20px;
+  background:rgba(247,199,102,.06);margin-bottom:18px;}
+.p-emoji{font-size:52px;display:block;margin-bottom:16px;animation:emojiBob 2s ease-in-out infinite;}
+@keyframes emojiBob{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-8px) scale(1.08);}}
+.p-title{font-family:'Playfair Display',serif;font-size:26px;font-style:italic;
+  color:white;margin-bottom:16px;line-height:1.3;}
+.p-title span{background:linear-gradient(90deg,#f7c766,#ffb3d1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.p-body{font-size:15px;color:rgba(255,255,255,.75);line-height:1.9;font-weight:600;
+  max-width:480px;margin:0 auto 28px;}
+.p-body .g{color:#f7c766;font-weight:800;}
+.p-body .p{color:#ffb3d1;font-weight:800;}
+.p-body .v{color:#c4a0f5;font-weight:800;}
+
+/* nav buttons */
+.nav-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.nav-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;letter-spacing:.5px;
+  padding:13px 30px;border-radius:26px;border:none;cursor:pointer;transition:all .22s;}
+.btn-next{background:linear-gradient(135deg,#D4537E,#b57bee);color:white;
+  animation:btnPulse 1.4s ease-in-out infinite;}
+.btn-next:hover{transform:translateY(-2px) scale(1.05);}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 0 0 rgba(212,83,126,.55);}50%{box-shadow:0 0 0 10px rgba(212,83,126,0);}}
+.btn-prev{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.15);}
+.btn-prev:hover{background:rgba(255,255,255,.14);color:white;}
+
+/* dots */
+.dots-row{display:flex;gap:7px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);
+  transition:all .35s;cursor:pointer;}
+.dot.active{background:linear-gradient(135deg,#D4537E,#b57bee);transform:scale(1.4);}
+.dot.done{background:rgba(212,83,126,.45);}
+
+/* FINAL CARD */
+.final-card{display:none;width:100%;text-align:center;animation:promiseIn .6s ease forwards;}
+.final-card.show{display:block;}
+.final-big{font-family:'Pacifico',cursive;font-size:36px;
+  background:linear-gradient(90deg,#f7c766,#ff85b0,#b57bee,#f7c766);background-size:300% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:enjoyShift 2s linear infinite;margin-bottom:14px;line-height:1.4;}
+.final-sub{font-size:14px;color:rgba(255,255,255,.55);font-weight:700;line-height:1.7;margin-bottom:24px;}
+.final-btn{display:inline-block;background:linear-gradient(135deg,#D4537E,#b57bee);
+  color:white;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;
+  padding:14px 32px;border-radius:26px;border:none;cursor:pointer;
+  text-decoration:none;transition:all .22s;animation:btnPulse 1.4s ease-in-out infinite;}
+.final-btn:hover{transform:translateY(-2px) scale(1.05);}
+
+.from-tag{position:relative;z-index:5;text-align:center;padding:10px 0 36px;
+  font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  background:linear-gradient(90deg,#f7c766,#D4537E,#b57bee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* sparkle */
+.sparkle{position:fixed;pointer-events:none;z-index:600;border-radius:50%;animation:spk ease-out forwards;}
+@keyframes spk{0%{transform:scale(0);opacity:1;}100%{transform:scale(2.5);opacity:0;}}
+
+/* ═══ WELCOME POPUP ═══ */
+.welcome-overlay{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;
+  background:rgba(5,0,14,.92);pointer-events:all;transition:background .5s ease;}
+.welcome-overlay.closing{background:rgba(5,0,14,0);pointer-events:none;}
+.welcome-box{position:relative;width:min(500px,92vw);
+  background:linear-gradient(145deg,#1e0926,#150620,#1a0a1e);
+  border:1px solid rgba(212,83,126,.35);border-radius:30px;
+  padding:50px 36px 40px;text-align:center;overflow:hidden;
+  animation:wboxIn .8s cubic-bezier(.34,1.45,.64,1) forwards;}
+@keyframes wboxIn{from{transform:scale(.4) rotate(-8deg);opacity:0;filter:blur(16px);}
+  to{transform:scale(1) rotate(0deg);opacity:1;filter:blur(0);}}
+.welcome-overlay.closing .welcome-box{animation:wboxOut .5s ease forwards;}
+@keyframes wboxOut{to{transform:scale(.85) translateY(-30px);opacity:0;filter:blur(10px);}}
+.welcome-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#b57bee,#D4537E,#f7c766,#D4537E,#b57bee);}
+
+.welcome-emoji-ring{display:flex;justify-content:center;gap:8px;margin-bottom:18px;font-size:22px;
+  animation:ringPop .9s cubic-bezier(.34,1.56,.64,1) .2s backwards;}
+@keyframes ringPop{from{transform:scale(0) rotate(-30deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+
+.welcome-title{font-family:'Pacifico',cursive;font-size:13px;letter-spacing:3px;
+  color:rgba(255,255,255,.45);text-transform:uppercase;margin-bottom:10px;}
+.welcome-main{font-family:'Playfair Display',serif;font-size:28px;font-style:italic;
+  color:white;line-height:1.35;margin-bottom:8px;
+  animation:wMainIn .7s cubic-bezier(.34,1.3,.64,1) .35s backwards;}
+@keyframes wMainIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.welcome-main span{background:linear-gradient(90deg,#f7c766,#ffb3d1,#b57bee);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.welcome-sub{font-size:13px;color:rgba(255,255,255,.45);font-weight:700;line-height:1.7;
+  margin-bottom:28px;animation:wMainIn .7s ease .5s backwards;}
+.welcome-btn{font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  padding:14px 40px;border-radius:30px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#D4537E,#b57bee);color:white;
+  animation:btnPulse 1.3s ease-in-out infinite, wMainIn .7s ease .65s backwards;
+  transition:transform .2s;}
+.welcome-btn:hover{transform:scale(1.06);}
+
+/* confetti inside welcome */
+.wconf{position:absolute;pointer-events:none;animation:confFall linear forwards;}
+@keyframes confFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(400px) rotate(720deg);opacity:0;}}
+
+/* heart shower */
+.heart-shower{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:850;}
+.hrt{position:absolute;top:-60px;animation:fall linear forwards;}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg) scale(0);opacity:0;}
+  10%{opacity:1;transform:translateY(5vh) rotate(10deg) scale(1);}
+  90%{opacity:.9;}100%{transform:translateY(115vh) rotate(360deg) scale(.7);opacity:0;}}
+
+@media(max-width:600px){
+  .hero-title{font-size:32px;}
+  .promise-stage{margin:0 14px 16px;padding:24px 18px 28px;}
+  .p-title{font-size:21px;}
+  .p-body{font-size:13.5px;}
+  .topbar{padding:12px 16px;}
+  .welcome-main{font-size:22px;}
+  .welcome-box{padding:38px 24px 30px;}
+  .final-big{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<div class="starbg" id="starbg"></div>
+<div class="aurora"></div>
+<div class="floating-hearts" id="fhearts"></div>
+<div class="heart-shower" id="heartShower"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="logo" href="index.html">AG ♥ Rupsha</a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="enjoy-text">ENJOY ENJOY ENJOY !!!!</div>
+    <a class="return-btn" href="index.html">← Return Back</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="hero-tag">✦ sealed with love & pinky swears ✦</div>
+  <div class="hero-title">Future <span>Promises</span> 🤞</div>
+  <div class="hero-sub">"every single one of these — I mean it, Batman." 🦇💜</div>
+</div>
+
+<!-- PROMISE STAGE -->
+<div class="promise-stage" id="promiseStage">
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-label">
+      <span id="pLabel">Promise 1 of 10</span>
+      <span id="pCount">🤞 0 kept so far</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Active promise panel -->
+  <div id="promisePanel">
+    <div class="promise-card" id="pCard">
+      <div class="p-number" id="pNum">Promise 01</div>
+      <div class="p-emoji" id="pEmoji"></div>
+      <div class="p-title" id="pTitle"></div>
+      <div class="p-body" id="pBody"></div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn btn-prev" id="prevBtn" onclick="prevP()" style="display:none;">← Back</button>
+      <button class="nav-btn btn-next" id="nextBtn" onclick="nextP()">Next Promise 🤞</button>
+    </div>
+    <div class="dots-row" id="dotsRow"></div>
+  </div>
+
+  <!-- Final card -->
+  <div class="final-card" id="finalCard">
+    <div class="p-emoji" style="font-size:52px;margin-bottom:18px;animation:emojiBob 2s ease-in-out infinite;">🫂</div>
+    <div class="final-big">I PROMISE ALL OF THIS!! 🤞💜</div>
+    <div class="final-sub">
+      10 promises. Every single one is real.<br>
+      <span style="color:#f7c766;font-weight:800;">Ami toke word dichi, Batman.</span><br>
+      Amader future ta onk onk sundor hbe — <span style="color:#ffb3d1;font-weight:800;">trust me!!</span> 🌸
+    </div>
+    <a class="final-btn" href="index.html">← Back to our world 🏠</a>
+  </div>
+
+</div>
+
+<div class="dots-row" style="position:relative;z-index:5;justify-content:center;margin-bottom:12px;" id="outerDots"></div>
+
+<div class="from-tag">✦ made with all my love, AG ✦</div>
+
+<!-- ═══ WELCOME POPUP ═══ -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-box" id="welcomeBox">
+    <div class="welcome-emoji-ring">🌟 🤞 💜 🦇 🤞 🌟</div>
+    <div class="welcome-title">A Special Gift For My Batman</div>
+    <div class="welcome-main">Welcome to the <span>World of Promises</span> 💜</div>
+    <div class="welcome-sub">
+      These aren't just words, Rupsha —<br>
+      <strong style="color:#f7c766;">these are my forever promises to you.</strong><br>
+      Every single one. Pinky sworn. 🤞
+    </div>
+    <button class="welcome-btn" onclick="closeWelcome()">Let's go!! 💖</button>
+  </div>
+</div>
+
+<script>
+/* ── STARS ── */
+var sb=document.getElementById('starbg');
+for(var i=0;i<100;i++){
+  var s=document.createElement('div');s.className='star';
+  var sz=Math.random()*2.5+.4;
+  s.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;animation-duration:'+(2+Math.random()*4)+'s;animation-delay:'+Math.random()*6+'s;';
+  sb.appendChild(s);
+}
+
+/* ── FLOATING HEARTS ── */
+var fh=document.getElementById('fhearts');
+var hSyms=['♥','❤','💕','💖','💗','🌸','🦇','💜','🤞'];
+for(var i=0;i<20;i++){
+  var el=document.createElement('span');el.className='fh';
+  el.textContent=hSyms[i%hSyms.length];
+  el.style.left=Math.random()*100+'%';el.style.bottom='-40px';
+  el.style.animationDuration=(5+Math.random()*7)+'s';
+  el.style.animationDelay=Math.random()*10+'s';
+  el.style.fontSize=(12+Math.random()*14)+'px';
+  el.style.color=['#D4537E','#f7c766','#b57bee','#ffb3d1','#ED93B1'][i%5];
+  fh.appendChild(el);
+}
+
+/* ── SPARKLES ── */
+var spC=['#D4537E','#f7c766','#b57bee','#ffb3d1','#5DCAA5'];
+document.addEventListener('click',function(e){
+  for(var i=0;i<5;i++){
+    var sp=document.createElement('div');sp.className='sparkle';
+    var sz=3+Math.random()*5;
+    sp.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX+(-20+Math.random()*40))+'px;top:'+(e.clientY+(-20+Math.random()*40))+'px;background:'+spC[i%5]+';animation-duration:'+(0.5+Math.random()*0.4)+'s;';
+    document.body.appendChild(sp);
+    setTimeout(function(el){return function(){el.remove()};}(sp),900);
+  }
+});
+
+/* ═══════════════════════════════
+   PROMISES DATA
+═══════════════════════════════ */
+var promises=[
+  {
+    emoji:'🌍',
+    title:'I promise to <span>travel the world</span> with you',
+    body:'Amra akdin proper trip e jabo — just tui ar ami. Pahaar, shomudro, bidesh — <span class="g">shob jaygay toke niye jabo.</span> Ei life e toke explore korabo. <span class="p">Promise!! 🤞</span>'
+  },
+  {
+    emoji:'🍜',
+    title:'I promise our <span>Phuchka date</span> will happen',
+    body:'Haan, ei promise ta alada kore krtei hbe — <span class="g">amader shei phuchka date MUST happen!!</span> Proper sajegoze, hath dhore, just amra dujone. <span class="p">No cancellation allowed this time!! 😤🤞</span>'
+  },
+  {
+    emoji:'📞',
+    title:'I promise to <span>always pick up</span> your call',
+    body:'Jokhn-i call korbii — <span class="g">ami thakbo.</span> Busy thakle-o janabo. Ghosting? Never. <span class="p">Tui kkhono alone feel korbii na</span> — ami always reachable. <span class="v">Always. 🤞</span>'
+  },
+  {
+    emoji:'😴',
+    title:'I promise our <span>late night calls</span> will never stop',
+    body:'Shei raat 2tar call e bakwas kora, ghum ghum voice e kotha bola — <span class="g">eta ami kokhono bondho korbo na.</span> Tui ghum ghum thakbii, ami-o thakbo. <span class="p">Amader raat gulo amader-i thakbe. 💜🤞</span>'
+  },
+  {
+    emoji:'💪',
+    title:'I promise to <span>always protect</span> you',
+    body:'Jokhn tui dukhi, ami shetao feel krbo. Jokhn tui scared, ami thakbo. <span class="g">Toke kkhono ekla feel korate debo na</span> — ager moto, porero moto. <span class="p">Ami tomar Batman-er Batman. 🦇🤞</span>'
+  },
+  {
+    emoji:'🎂',
+    title:'I promise to <span>never forget</span> your birthday',
+    body:'Tomar birthday — <span class="g">special krtei hbe</span>. No excuses, no forgetfulness. <span class="p">Har bochor toke feel korate hbe</span> j tui koto important. And this year — <span class="v">ami amake promise korchi eta. 🎉🤞</span>'
+  },
+  {
+    emoji:'🫂',
+    title:'I promise to <span>always be your safe space</span>',
+    body:'Jokhn tui tired, jokhn tui overwhelmed, jokhn tui just chahis keu shune jak — <span class="g">ami shei manush.</span> No judgment. No lecture. Just ami. <span class="p">Tui jemon aachis, shei tui-i amar shobcheye priyo. 💜🤞</span>'
+  },
+  {
+    emoji:'📖',
+    title:'I promise to <span>grow with you</span> every single day',
+    body:'Amra dujone-i change hbo — <span class="g">but ami promise korchi j ami tomar sathe grow korbo.</span> Better version hbo — tor jonne, amader jonne. <span class="p">Tui amar motivation, tui amar reason. 🌱🤞</span>'
+  },
+  {
+    emoji:'🏠',
+    title:'I promise <span>our future home</span> will be full of love',
+    body:'Akdin — <span class="g">amader nijer ghor hbe.</span> Shekane Batman-er corner thakbe, Megamind thakbe, amader chaotic love thakbe. <span class="p">Amar shob plan-e tui aachis</span> — always. <span class="v">Amader ghor, amader rules!! 💜🤞</span>'
+  },
+  {
+    emoji:'♾️',
+    title:'I promise to <span>love you</span> — infinitely, always',
+    body:'Shob promise er shesh e ei akta — <span class="g">ami toke bhalobashi.</span> 730 din, 7300 din, 73000 din — <span class="p">koto bochor-i hok na keno.</span> Tui amar Batman. Ami tomar AG. <span class="v">Eta kokhono change hbe na. NEVER. 🦇💜🤞</span>'
+  }
+];
+
+var curP=0;
+
+/* build dots */
+function buildDots(){
+  var dr=document.getElementById('dotsRow');
+  dr.innerHTML='';
+  for(var i=0;i<promises.length;i++){
+    var d=document.createElement('div');d.className='dot';d.id='dot'+i;
+    (function(idx){d.onclick=function(){goToP(idx);};})(i);
+    dr.appendChild(d);
+  }
+}
+
+function updateDots(){
+  for(var i=0;i<promises.length;i++){
+    var d=document.getElementById('dot'+i);
+    if(!d)continue;
+    d.classList.remove('active','done');
+    if(i===curP)d.classList.add('active');
+    else if(i<curP)d.classList.add('done');
+  }
+}
+
+function loadP(n){
+  var p=promises[n];
+  var pct=Math.round((n/promises.length)*100);
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('pLabel').textContent='Promise '+(n+1)+' of '+promises.length;
+  document.getElementById('pCount').textContent='🤞 '+n+' so far';
+  document.getElementById('pNum').textContent='Promise '+String(n+1).padStart(2,'0');
+  document.getElementById('pEmoji').textContent=p.emoji;
+  document.getElementById('pTitle').innerHTML=p.title;
+  document.getElementById('pBody').innerHTML=p.body;
+
+  /* prev button */
+  document.getElementById('prevBtn').style.display=n>0?'':'none';
+
+  /* next button text */
+  var nb=document.getElementById('nextBtn');
+  nb.textContent=n===promises.length-1?'See all promises!! 🎉':'Next Promise 🤞';
+
+  /* animate card */
+  var card=document.getElementById('pCard');
+  card.classList.remove('promise-card');
+  void card.offsetWidth;
+  card.classList.add('promise-card');
+
+  updateDots();
+  burstSparkles();
+}
+
+function goToP(n){
+  curP=n;
+  loadP(curP);
+}
+
+function nextP(){
+  if(curP<promises.length-1){
+    curP++;
+    loadP(curP);
+  } else {
+    showFinal();
+  }
+}
+
+function prevP(){
+  if(curP>0){
+    curP--;
+    loadP(curP);
+  }
+}
+
+function showFinal(){
+  document.getElementById('promisePanel').style.display='none';
+  document.getElementById('prog-wrap');
+  document.getElementById('progFill').style.width='100%';
+  document.getElementById('pLabel').textContent='All 10 Promises!! 🎉';
+  document.getElementById('pCount').textContent='🤞 All kept!!';
+  document.getElementById('finalCard').classList.add('show');
+  document.getElementById('dotsRow').style.display='none';
+  heartShowerFn();
+  /* update all dots to done */
+  for(var i=0;i<promises.length;i++){
+    var d=document.getElementById('dot'+i);
+    if(d)d.classList.add('done');
+  }
+}
+
+function burstSparkles(){
+  var syms=['💖','✨','💜','🌸','🤞','⭐'];
+  for(var i=0;i<6;i++){
+    var h=document.createElement('span');
+    var x=100+Math.random()*(window.innerWidth-200);
+    var y=200+Math.random()*200;
+    h.style.cssText='position:fixed;left:'+x+'px;top:'+y+'px;font-size:'+(14+Math.random()*16)+'px;pointer-events:none;z-index:9999;animation:spk '+(0.5+Math.random()*0.5)+'s ease-out forwards;';
+    h.textContent=syms[i%syms.length];
+    document.body.appendChild(h);
+    setTimeout(function(el){return function(){el.remove()};}(h),1100);
+  }
+}
+
+function heartShowerFn(){
+  var shower=document.getElementById('heartShower');shower.innerHTML='';
+  var syms=['💖','💗','💕','❤️','💜','🌸','🦇','💝','💞','✨','🤞'];
+  var count=0;
+  var iv=setInterval(function(){
+    for(var b=0;b<6;b++){
+      var h=document.createElement('span');h.className='hrt';
+      var sz=18+Math.random()*28,dur=1.8+Math.random()*2.2,delay=Math.random()*.3;
+      h.style.cssText='left:'+Math.random()*100+'%;font-size:'+sz+'px;animation-duration:'+dur+'s;animation-delay:'+delay+'s;';
+      h.textContent=syms[Math.floor(Math.random()*syms.length)];
+      shower.appendChild(h);
+      setTimeout(function(el){return function(){el.remove()};}(h),(dur+delay)*1000+200);
+    }
+    count++;if(count>40)clearInterval(iv);
+  },120);
+}
+
+/* ═══ WELCOME POPUP ═══ */
+function burstWelcomeConfetti(){
+  var box=document.getElementById('welcomeBox');
+  var cols=['#f7c766','#D4537E','#b57bee','#ffb3d1','#5DCAA5','#ff6eb4','#fff'];
+  for(var i=0;i<60;i++){
+    var c=document.createElement('div');c.className='wconf';
+    var w=4+Math.random()*8,h=4+Math.random()*14;
+    c.style.cssText='width:'+w+'px;height:'+h+'px;left:'+Math.random()*100+'%;top:-10px;background:'+cols[Math.floor(Math.random()*cols.length)]+';border-radius:'+(Math.random()>.5?'50%':'2px')+';animation-duration:'+(1.4+Math.random()*1.6)+'s;animation-delay:'+Math.random()*.7+'s;position:absolute;';
+    box.appendChild(c);
+    setTimeout(function(el){return function(){el.remove()};}(c),3500);
+  }
+}
+
+function closeWelcome(){
+  var ov=document.getElementById('welcomeOverlay');
+  ov.classList.add('closing');
+  setTimeout(function(){ov.style.display='none';},500);
+  heartShowerFn();
+}
+
+/* INIT */
+buildDots();
+loadP(0);
+burstWelcomeConfetti();
+</script>
+</body>
+</html>
