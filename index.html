@@ -746,18 +746,21 @@ function tick(){
   document.getElementById('cd-h').textContent=String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
   document.getElementById('cd-m').textContent=String(Math.floor(diff%3600000/60000)).padStart(2,'0');
   document.getElementById('cd-s').textContent=String(Math.floor(diff%60000/1000)).padStart(2,'0');
-  /* fire bomb the moment it hits zero — only once per session */
-  if(diff===0&&!bombFired){bombFired=true;loveBomb();}
+  /* fire bomb the exact moment timer hits zero — only once per session */
+  if(diff===0&&!bombFired){
+    bombFired=true;
+    sessionStorage.setItem('bombDone','1');
+    loveBomb();
+  }
 }
 tick();setInterval(tick,1000);
 
-/* ── LOVE BOMB ── fires on zero AND on page-open if past anniversary ── */
+/* ── LOVE BOMB ── */
 function loveBomb(){
-  /* wave 1 — instant burst from center */
   var cx=window.innerWidth/2,cy=window.innerHeight/2;
   var syms=['💜','💖','💗','💕','🌸','✨','🦇','⭐','🎉','🎊','💫','🌟','❤️','🥺','😍'];
   var cols=['#f7c766','#D4537E','#b57bee','#ffb3d1','#5DCAA5','#ff85b0','#fff'];
-  /* confetti particles */
+  /* wave 1 — burst from center */
   for(var i=0;i<120;i++){
     (function(i){
       setTimeout(function(){
@@ -768,12 +771,8 @@ function loveBomb(){
         var size=isEmoji?(16+Math.random()*22):(5+Math.random()*9);
         var dur=1.2+Math.random()*1.6;
         el.style.cssText=[
-          'position:fixed',
-          'left:'+cx+'px',
-          'top:'+cy+'px',
-          'font-size:'+size+'px',
-          'pointer-events:none',
-          'z-index:9999',
+          'position:fixed','left:'+cx+'px','top:'+cy+'px',
+          'font-size:'+size+'px','pointer-events:none','z-index:9999',
           'transform:translate(-50%,-50%)',
           'transition:all '+dur+'s cubic-bezier(.2,.8,.4,1)',
           isEmoji?'':'width:'+size+'px',
@@ -784,14 +783,12 @@ function loveBomb(){
         ].join(';');
         el.textContent=isEmoji?syms[Math.floor(Math.random()*syms.length)]:'';
         document.body.appendChild(el);
-        requestAnimationFrame(function(){
-          requestAnimationFrame(function(){
-            el.style.left=(cx+Math.cos(angle)*speed*(0.6+Math.random()))+'px';
-            el.style.top=(cy+Math.sin(angle)*speed*(0.6+Math.random())+120)+'px';
-            el.style.opacity='0';
-            el.style.transform='translate(-50%,-50%) rotate('+(Math.random()*720-360)+'deg) scale(0.3)';
-          });
-        });
+        requestAnimationFrame(function(){requestAnimationFrame(function(){
+          el.style.left=(cx+Math.cos(angle)*speed*(0.6+Math.random()))+'px';
+          el.style.top=(cy+Math.sin(angle)*speed*(0.6+Math.random())+120)+'px';
+          el.style.opacity='0';
+          el.style.transform='translate(-50%,-50%) rotate('+(Math.random()*720-360)+'deg) scale(0.3)';
+        });});
         setTimeout(function(){el.remove();},(dur+0.2)*1000);
       },Math.random()*400);
     })(i);
@@ -800,8 +797,7 @@ function loveBomb(){
   var count=0;
   var rain=setInterval(function(){
     for(var b=0;b<10;b++){
-      var h=document.createElement('span');
-      h.className='hrt';
+      var h=document.createElement('span');h.className='hrt';
       var sz=16+Math.random()*26,dur=1.6+Math.random()*2.2,delay=Math.random()*.4;
       h.style.cssText='left:'+Math.random()*100+'%;font-size:'+sz+'px;animation-duration:'+dur+'s;animation-delay:'+delay+'s;';
       h.textContent=syms[Math.floor(Math.random()*syms.length)];
@@ -810,23 +806,27 @@ function loveBomb(){
     }
     count++;if(count>50)clearInterval(rain);
   },100);
-  /* wave 3 — ring pulse on countdown units */
+  /* wave 3 — countdown units pulse */
   var units=document.querySelectorAll('.cd-unit');
   units.forEach(function(u,i){
     setTimeout(function(){
-      u.style.transition='all .3s';
-      u.style.transform='scale(1.35)';
-      u.style.borderColor='#D4537E';
-      u.style.boxShadow='0 0 28px rgba(212,83,126,.8)';
+      u.style.transition='all .3s';u.style.transform='scale(1.35)';
+      u.style.borderColor='#D4537E';u.style.boxShadow='0 0 28px rgba(212,83,126,.8)';
       setTimeout(function(){u.style.transform='';u.style.borderColor='';u.style.boxShadow='';},600);
     },i*120);
   });
 }
 
-/* ── CHECK ON PAGE OPEN if anniversary already passed ── */
+/* ── FIRE ON FRESH LINK OPEN (not back-navigation) ── 
+   sessionStorage is cleared when the tab/browser is closed,
+   so every brand-new open of the link fires the bomb.
+   Navigating back from other pages reuses the same session → no re-fire. */
 (function(){
-  if(new Date()>=ANNIVERSARY){
-    /* fire with a small delay so page renders first */
+  var now=new Date();
+  var isAnniversary=now>=ANNIVERSARY;
+  var alreadyFiredThisSession=sessionStorage.getItem('bombDone')==='1';
+  if(isAnniversary&&!alreadyFiredThisSession){
+    sessionStorage.setItem('bombDone','1');
     setTimeout(loveBomb,800);
   }
 })();
